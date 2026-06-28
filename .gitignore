@@ -1,0 +1,18 @@
+# Java
+*.class
+
+# Build folders
+build/
+target/
+out/
+
+# AI runtime (large files)
+backendmain/ai/runtime/model/
+backendmain/ai/runtime/bin/
+
+# IDE files
+.idea/
+.vscode/
+
+aifeatures/runtime/model/
+aifeatures/runtime/bin/
