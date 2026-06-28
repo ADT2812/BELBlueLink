@@ -1,0 +1,127 @@
+.root{
+    -fx-background-color:#DDEEFF;
+}
+
+.login-card{
+    -fx-fill:white;
+    -fx-arc-width:25;
+    -fx-arc-height:25;
+}
+
+.title{
+    -fx-font-size:34px;
+    -fx-font-weight:bold;
+    -fx-text-fill:#005BAC;
+}
+
+.subtitle{
+    -fx-font-size:16px;
+    -fx-text-fill:#5E6B75;
+}
+
+.text-field,
+.password-field{
+
+    -fx-background-radius:10;
+
+    -fx-border-radius:10;
+
+    -fx-border-color:#B0C4DE;
+
+    -fx-padding:10;
+
+    -fx-font-size:15px;
+}
+
+.button{
+
+    -fx-background-color:#005BAC;
+
+    -fx-text-fill:white;
+
+    -fx-font-size:16px;
+
+    -fx-background-radius:10;
+
+    -fx-cursor:hand;
+}
+
+.button:hover{
+
+    -fx-background-color:#0077CC;
+}
+
+.hyperlink{
+
+    -fx-text-fill:#005BAC;
+
+    -fx-border-color:transparent;
+}
+.list-view{
+    -fx-background-color:white;
+    -fx-border-color:#D9E3F0;
+    -fx-border-radius:10;
+    -fx-background-radius:10;
+    -fx-padding:5;
+}
+
+.list-cell{
+    -fx-background-color:white;
+    -fx-padding:12;
+    -fx-font-size:15px;
+}
+
+.list-cell:hover{
+    -fx-background-color:#E8F2FF;
+}
+
+.list-cell:selected{
+    -fx-background-color:#005BAC;
+    -fx-text-fill:white;
+}
+.list-view {
+    -fx-background-color: white;
+    -fx-border-color: #D9E3F0;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+}
+
+.list-cell {
+    -fx-padding: 10;
+    -fx-font-size: 14px;
+}
+
+.list-cell:hover {
+    -fx-background-color: #EAF4FF;
+}
+
+.list-cell:selected {
+    -fx-background-color: #005BAC;
+    -fx-text-fill: white;
+}
+.button {
+    -fx-background-color: #005BAC;
+    -fx-text-fill: white;
+    -fx-background-radius: 8;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #0078D4;
+}
+
+.text-field {
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-color: #D0D7E2;
+}
+
+.label {
+    -fx-font-family: "Segoe UI";
+}
+
+.scroll-pane {
+    -fx-background: white;
+    -fx-border-color: transparent;
+}

@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.InnerShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: #F3F7FC;" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <BorderPane layoutY="-2.0" prefHeight="700.0" prefWidth="1230.0" style="-fx-background-color: #F8FAFC;" stylesheets="@../css/style.css">
+         <left>
+            <VBox prefHeight="200.0" prefWidth="280.0" spacing="15.0" style="-fx-background-color: #F9FBFD;" stylesheets="@../css/style.css" BorderPane.alignment="CENTER">
+               <padding>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </padding>
+               <children>
+                  <TextField fx:id="searchField" prefHeight="40.0" text="Search Contacts...">
+                     <effect>
+                        <InnerShadow />
+                     </effect></TextField>
+                  <Separator prefWidth="200.0" />
+                  <Label text="Online Users" textFill="#005bac">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+                  <ListView fx:id="contactsListView" prefHeight="194.0" prefWidth="240.0" VBox.vgrow="ALWAYS">
+                     <effect>
+                        <InnerShadow />
+                     </effect></ListView>
+                  <Separator prefWidth="200.0" />
+                  <Button fx:id="aiAssistantButton" alignment="CENTER" mnemonicParsing="false" text="AI Assistant">
+                     <graphic>
+                        <ImageView fitHeight="20.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icons/smart_toy_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></Button>
+                  <Button fx:id="SettingButton" mnemonicParsing="false" text="Logout" />
+               </children>
+            </VBox>
+         </left>
+         <top>
+            <HBox prefHeight="101.0" prefWidth="1230.0" spacing="20.0" style="-fx-background-color: white; -fx-border-color: #D9E3F0; -fx-border-width: 0010;" BorderPane.alignment="CENTER">
+               <padding>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </padding>
+               <children>
+                  <ImageView fitHeight="65.0" fitWidth="107.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/Screenshot 2026-06-25 232124.png" />
+                     </image>
+                  </ImageView>
+                  <Pane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <Label fx:id="headerTitleLabel" layoutX="14.0" layoutY="5.0" prefHeight="22.0" prefWidth="165.0" style="-fx-alignment: #1F2937;" text="Welcome" textFill="#1f2937">
+                           <font>
+                              <Font name="System Bold" size="22.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="headerSubtitleLabel" layoutX="14.0" layoutY="29.0" text="BlueLink Messenger" textFill="#005bac">
+                           <font>
+                              <Font name="Segoe UI Bold" size="24.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </Pane>
+                  <VBox prefHeight="41.0" prefWidth="554.0" HBox.hgrow="ALWAYS" />
+                  <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0">
+                     <graphic>
+                        <ImageView fitHeight="20.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icons/settings_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></Button>
+               </children>
+            </HBox>
+         </top>
+         <center>
+            <BorderPane prefHeight="200.0" prefWidth="200.0" stylesheets="@../css/style.css" BorderPane.alignment="CENTER">
+               <top>
+                  <BorderPane prefHeight="96.0" prefWidth="950.0" BorderPane.alignment="CENTER">
+                     <top>
+                        <HBox prefHeight="60.0" prefWidth="200.0" spacing="15.0" style="-fx-background-color: white; -fx-border-color: #E5EAF0; -fx-border-width: 0010;" BorderPane.alignment="CENTER">
+                           <padding>
+                              <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                           </padding>
+                           <children>
+                              <VBox prefHeight="30.0" prefWidth="174.0">
+                                 <children>
+                                    <Label text="Rudraksh ">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="Online" textFill="GREY" />
+                                 </children>
+                              </VBox>
+                              <Pane prefHeight="30.0" prefWidth="562.0" HBox.hgrow="ALWAYS" />
+                              <Button fx:id="callButton" mnemonicParsing="false">
+                                 <graphic>
+                                    <ImageView fitHeight="20.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../icons/call_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic></Button>
+                              <Button fx:id="moreButton" mnemonicParsing="false" text="More" />
+                           </children>
+                        </HBox>
+                     </top>
+                  </BorderPane>
+               </top>
+               <center>
+                  <StackPane prefHeight="150.0" prefWidth="200.0" style="-fx-background-color: #F8FAFC;" BorderPane.alignment="CENTER">
+                     <children>
+                        <VBox fx:id="welcomePane" alignment="CENTER" prefHeight="362.0" prefWidth="950.0" spacing="20.0" StackPane.alignment="CENTER">
+                           <children>
+                              <Label text="Welcome to BlueLink" textFill="#005bac">
+                                 <font>
+                                    <Font name="System Bold" size="26.0" />
+                                 </font>
+                              </Label>
+                              <Label text="Select a user from the left to start chatting." textFill="#6b7280">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                        <VBox fx:id="chatPane" prefHeight="200.0" prefWidth="100.0" stylesheets="@../css/style.css" visible="false">
+                           <children>
+                              <ScrollPane fitToWidth="true" style="-fx-background-color: white; -fx-border-color: transparent;">
+                                 <content>
+                                    <VBox fx:id="messagesContainer" spacing="12.0">
+                                       <padding>
+                                          <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                                       </padding>
+                                       <children>
+                                          <HBox fx:id="incomingMessage" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
+                                             <children>
+                                                <VBox prefHeight="200.0" prefWidth="100.0">
+                                                   <children>
+                                                      <Label style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 10 15 10 15; -fx-border-color: #D9E3F0; -fx-border-radius: 15;" text="Hello" />
+                                                      <Label text="10:30 AM" textFill="GREY">
+                                                         <font>
+                                                            <Font size="11.0" />
+                                                         </font>
+                                                      </Label>
+                                                   </children>
+                                                </VBox>
+                                             </children>
+                                          </HBox>
+                                          <HBox fx:id="outgoingMessage" alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0">
+                                             <children>
+                                                <VBox prefHeight="200.0" prefWidth="100.0">
+                                                   <children>
+                                                      <Label style="-fx-background-color: #005BAC; -fx-text-fill: white; -fx-background-radius: 15; -fx-padding: 10 15 10 15;" text="Hi!" />
+                                                      <Label text="10:31 AM" textFill="GREY">
+                                                         <font>
+                                                            <Font size="11.0" />
+                                                         </font>
+                                                      </Label>
+                                                   </children>
+                                                </VBox>
+                                             </children>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" fillHeight="false" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
+                                             <children>
+                                                <VBox prefHeight="200.0" prefWidth="100.0" spacing="4.0">
+                                                   <children>
+                                                      <Label style="-fx-background-image: white; -fx-background-radius: 15; -fx-padding: 10 15 10 15; -fx-border-color: #D9E3F0; -fx-border-radius: 15;" text="Sup" />
+                                                      <Label text="10:32 AM" textFill="GREY">
+                                                         <font>
+                                                            <Font size="11.0" />
+                                                         </font>
+                                                      </Label>
+                                                   </children>
+                                                </VBox>
+                                             </children>
+                                          </HBox>
+                                       </children>
+                                    </VBox>
+                                 </content>
+                              </ScrollPane>
+                           </children>
+                           <effect>
+                              <InnerShadow />
+                           </effect>
+                        </VBox>
+                     </children>
+                  </StackPane>
+               </center>
+               <bottom>
+                  <HBox prefHeight="49.0" prefWidth="950.0" spacing="10.0" style="-fx-background-color: white; -fx-border-color: #E5EAF0; -fx-border-width: 1 0 0 0;" BorderPane.alignment="CENTER">
+                     <padding>
+                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                     </padding>
+                     <children>
+                        <Button fx:id="attachButton" mnemonicParsing="false">
+                           <graphic>
+                              <ImageView fitHeight="20.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icons/attach_file_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></Button>
+                        <TextField fx:id="messageField" text="Type a message" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="sendButton" mnemonicParsing="false">
+                           <graphic>
+                              <ImageView fitHeight="20.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icons/send_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></Button>
+                     </children>
+                  </HBox>
+               </bottom>
+            </BorderPane>
+         </center>
+      </BorderPane>
+   </children>
+</AnchorPane>
