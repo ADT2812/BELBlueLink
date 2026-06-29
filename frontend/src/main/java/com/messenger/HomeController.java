@@ -22,6 +22,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.scene.control.Hyperlink;
+import java.awt.Desktop;
 
 public class HomeController {
 
@@ -268,36 +270,138 @@ private void openSettings() {
 
     private void startReceiver() {
 
-        Thread thread = new Thread(() -> {
+    Thread thread = new Thread(() -> {
 
-            while (true) {
+        while (true) {
 
-                String msg = client.receiveMessage();
+            String msg = client.receiveMessage();
 
-                if (msg == null)
-                    break;
+            if (msg == null)
+                break;
 
-                Platform.runLater(() -> {
+            Platform.runLater(() -> {
 
-                    if (msg.startsWith("[FILE]") || msg.startsWith("[IMAGE]")) {
-                        addIncomingMessage("📎 " + msg);
-                        messagesContainer.layout();
+                try {
+
+                    if (msg.startsWith("FILE:")) {
+
+                        String[] parts = msg.split(":", 6);
+
+                        String sender = parts[1];
+                        String fileName = parts[2];
+                        String base64 = parts[5];
+
+                        String path = FileManager.saveIncomingFile(
+                                sender,
+                                fileName,
+                                base64);
+
+                        addIncomingFile(fileName, path);
+
                     } else {
+
                         addIncomingMessage(msg);
-                        messagesContainer.layout();
+
                     }
 
-                });
-            }
-        });
+                    messagesContainer.layout();
 
-        thread.setDaemon(true);
-        thread.start();
-    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            });
+
+        }
+
+    });
+
+    thread.setDaemon(true);
+    thread.start();
+}
+
+private void addIncomingFile(String fileName, String path) {
+
+    Hyperlink link = new Hyperlink("📎 " + fileName);
+
+    link.setOnAction(e -> {
+
+        try {
+
+            java.awt.Desktop.getDesktop().open(new File(path));
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+    });
+
+    VBox bubble = new VBox(link);
+
+    bubble.setStyle(
+            "-fx-background-color:white;" +
+            "-fx-padding:10;" +
+            "-fx-background-radius:15;"
+    );
+
+    HBox box = new HBox(bubble);
+
+    messagesContainer.getChildren().add(box);
+
+    Platform.runLater(() -> chatScrollPane.setVvalue(1.0));
+}
 
     private void addIncomingMessage(String text) {
 
+    if (text.startsWith("FILE:")) {
+
+        String[] parts = text.split(":", 6);
+
+        String sender = parts[1];
+        String fileName = parts[2];
+        String base64 = parts[5];
+
+        try {
+
+            String path = FileManager.saveIncomingFile(sender, fileName, base64);
+
+            javafx.scene.control.Hyperlink link =
+                    new javafx.scene.control.Hyperlink("📎 " + fileName);
+
+            link.setOnAction(e -> {
+
+                try {
+                    java.awt.Desktop.getDesktop().open(new java.io.File(path));
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+
+            });
+
+            Label time = new Label(currentTime());
+            time.setStyle("-fx-font-size:10; -fx-text-fill:gray;");
+
+            VBox bubble = new VBox(link, time);
+
+            HBox box = new HBox(bubble);
+
+            messagesContainer.getChildren().add(box);
+
+            Platform.runLater(() -> chatScrollPane.setVvalue(1.0));
+
+        }
+
+        catch (Exception e) {
+
+            e.printStackTrace();
+
+        }
+
+        return;
+    }
+
     Label label = new Label(text);
+
     label.setWrapText(true);
 
     label.setStyle(
@@ -309,6 +413,7 @@ private void openSettings() {
     );
 
     Label time = new Label(currentTime());
+
     time.setStyle("-fx-font-size:10; -fx-text-fill:gray;");
 
     VBox bubble = new VBox(label, time);
@@ -316,6 +421,7 @@ private void openSettings() {
     HBox box = new HBox(bubble);
 
     messagesContainer.getChildren().add(box);
+
     Platform.runLater(() -> chatScrollPane.setVvalue(1.0));
 }
 

@@ -47,7 +47,7 @@ public class LoginController {
 
         System.out.println("Connecting to server...");
 
-        if (!client.connect(username)) {
+        if (!client.connect(username,password)) {
 
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Connection Error");

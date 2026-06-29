@@ -128,19 +128,19 @@ public class ClientHandler implements Runnable {
 
             username = reader.readLine();
 
-            UserManager.addUser(username, this);
+            String password = reader.readLine();
 
-            writer.println(
-                "Connected! Use format: username:message");
+if(!UserDatabase.login(username,password)){
+    writer.println("LOGIN_FAILED");
+    clientSocket.close();
+    return;
+}
 
-            writer.println(
-                "Commands: /history <user> | /create <group> | /join <group> | /group <name> <message>");
+UserManager.addUser(username,this);
 
-            writer.println(
-                "Files: /sendfile <user> <fileSize> <isImage> <fileName> (then send the Base64 data line)");
+writer.println("LOGIN_SUCCESS");
 
-            writer.println(
-                "Group files: /groupfile <group> <fileSize> <isImage> <fileName> (then send the Base64 data line)");
+            writer.println("LOGIN_SUCCESS");
 
             String input;
 
