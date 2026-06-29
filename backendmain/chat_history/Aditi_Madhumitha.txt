@@ -1,0 +1,17 @@
+[2026-06-28T20:38:24.981505400] Madhumitha: Hi Aditi
+[2026-06-28T20:38:39.063073] Aditi: Hey Madhumitha
+[2026-06-28T20:44:56.513418500] Madhumitha: Hello
+[2026-06-28T21:07:41.472854700] Madhumitha: Hey
+[2026-06-28T21:09:20.910694700] Aditi: Hello Madhu
+[2026-06-28T21:10:00.648751500] Madhumitha: Hello Aditi
+[2026-06-28T21:10:18.500812800] Madhumitha: How are you?
+[2026-06-29T08:51:22.731435300] Madhumitha: Hello Aditi
+[2026-06-29T08:51:39.508743300] Aditi: Hi Madhumitha
+[2026-06-29T08:54:47.559561200] Aditi sent a file: ChatGPT Image Jun 27, 2026, 09_37_02 PM.png (2523993 bytes)
+[2026-06-29T08:55:35.824266300] Madhumitha: thank you
+[2026-06-29T08:57:50.897675900] Madhumitha: /summary Aditi
+[2026-06-29T08:58:08.509759700] Aditi: /summary
+[2026-06-29T11:20:43.995258] Madhumitha: Hi
+[2026-06-29T11:21:14.775069500] Aditi: what is earth's shape
+[2026-06-29T11:22:24.128159200] Aditi sent a file: ChatGPT Image Jun 27, 2026, 09_37_02 PM.png (2523993 bytes)
+[2026-06-29T11:23:18.383146200] Aditi: How are you doing madhu

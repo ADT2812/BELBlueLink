@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.messenger.AIController"
+            prefWidth="600"
+            prefHeight="700">
+
+    <top>
+        <HBox spacing="10"
+              style="-fx-background-color:#005BAC; -fx-padding:15;">
+            <children>
+                <Label text="BlueLink AI Assistant"
+                       style="-fx-text-fill:white;
+                              -fx-font-size:20;
+                              -fx-font-weight:bold;"/>
+            </children>
+        </HBox>
+    </top>
+
+    <center>
+
+        <ScrollPane fx:id="scrollPane"
+                    fitToWidth="true"
+                    fitToHeight="true">
+
+            <content>
+
+                <VBox fx:id="chatBox"
+                      spacing="12"
+                      style="-fx-background-color:#F5F8FC;">
+
+                    <padding>
+                        <Insets top="20"
+                                right="20"
+                                bottom="20"
+                                left="20"/>
+                    </padding>
+
+                </VBox>
+
+            </content>
+
+        </ScrollPane>
+
+    </center>
+
+    <bottom>
+
+        <HBox spacing="10"
+              style="-fx-padding:15;">
+
+            <TextField fx:id="questionField"
+                       promptText="Ask BlueLink AI anything..."
+                       HBox.hgrow="ALWAYS"/>
+
+            <Button fx:id="sendButton"
+                    text="Send"
+                    onAction="#sendMessage"/>
+
+        </HBox>
+
+    </bottom>
+
+</BorderPane>

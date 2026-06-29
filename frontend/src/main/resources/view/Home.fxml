@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: #F3F7FC;" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:controller="com.messenger.HomeController" prefHeight="700.0"  prefWidth="1200.0" style="-fx-background-color: #F3F7FC;" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <BorderPane layoutY="-2.0" prefHeight="700.0" prefWidth="1230.0" style="-fx-background-color: #F8FAFC;" stylesheets="@../css/style.css">
          <left>
@@ -27,7 +27,7 @@
                   <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                </padding>
                <children>
-                  <TextField fx:id="searchField" prefHeight="40.0" text="Search Contacts...">
+                  <TextField fx:id="searchField" prefHeight="40.0" promptText="Search Contacts...">
                      <effect>
                         <InnerShadow />
                      </effect></TextField>
@@ -37,12 +37,15 @@
                         <Font name="System Bold" size="16.0" />
                      </font>
                   </Label>
-                  <ListView fx:id="contactsListView" prefHeight="194.0" prefWidth="240.0" VBox.vgrow="ALWAYS">
+                  <ListView fx:id="contactsListView"  prefHeight="194.0" prefWidth="240.0" VBox.vgrow="ALWAYS">
                      <effect>
                         <InnerShadow />
                      </effect></ListView>
                   <Separator prefWidth="200.0" />
-                  <Button fx:id="aiAssistantButton" alignment="CENTER" mnemonicParsing="false" text="AI Assistant">
+                  <Button
+    fx:id="aiAssistantButton"
+    text="AI Assistant"
+    onAction="#openAIAssistant" >
                      <graphic>
                         <ImageView fitHeight="20.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -50,7 +53,7 @@
                            </image>
                         </ImageView>
                      </graphic></Button>
-                  <Button fx:id="SettingButton" mnemonicParsing="false" text="Logout" />
+                  <Button fx:id="SettingButton" mnemonicParsing="false" text="Logout" onAction="#logout" />
                </children>
             </VBox>
          </left>
@@ -102,15 +105,18 @@
                            </padding>
                            <children>
                               <VBox prefHeight="30.0" prefWidth="174.0">
-                                 <children>
-                                    <Label text="Rudraksh ">
-                                       <font>
-                                          <Font name="System Bold" size="16.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="Online" textFill="GREY" />
-                                 </children>
-                              </VBox>
+    <children>
+
+        <Label fx:id="chatUserLabel" text="Select Contact">
+            <font>
+                <Font name="System Bold" size="16.0"/>
+            </font>
+        </Label>
+
+        <Label fx:id="chatStatusLabel" text="Offline" textFill="GREY"/>
+
+    </children>
+</VBox>
                               <Pane prefHeight="30.0" prefWidth="562.0" HBox.hgrow="ALWAYS" />
                               <Button fx:id="callButton" mnemonicParsing="false">
                                  <graphic>
@@ -145,55 +151,13 @@
                         </VBox>
                         <VBox fx:id="chatPane" prefHeight="200.0" prefWidth="100.0" stylesheets="@../css/style.css" visible="false">
                            <children>
-                              <ScrollPane fitToWidth="true" style="-fx-background-color: white; -fx-border-color: transparent;">
+                              <ScrollPane fx:id="chatScrollPane" fitToWidth="true" style="-fx-background-color: white; -fx-border-color: transparent;">
                                  <content>
                                     <VBox fx:id="messagesContainer" spacing="12.0">
                                        <padding>
                                           <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                                        </padding>
                                        <children>
-                                          <HBox fx:id="incomingMessage" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
-                                             <children>
-                                                <VBox prefHeight="200.0" prefWidth="100.0">
-                                                   <children>
-                                                      <Label style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 10 15 10 15; -fx-border-color: #D9E3F0; -fx-border-radius: 15;" text="Hello" />
-                                                      <Label text="10:30 AM" textFill="GREY">
-                                                         <font>
-                                                            <Font size="11.0" />
-                                                         </font>
-                                                      </Label>
-                                                   </children>
-                                                </VBox>
-                                             </children>
-                                          </HBox>
-                                          <HBox fx:id="outgoingMessage" alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0">
-                                             <children>
-                                                <VBox prefHeight="200.0" prefWidth="100.0">
-                                                   <children>
-                                                      <Label style="-fx-background-color: #005BAC; -fx-text-fill: white; -fx-background-radius: 15; -fx-padding: 10 15 10 15;" text="Hi!" />
-                                                      <Label text="10:31 AM" textFill="GREY">
-                                                         <font>
-                                                            <Font size="11.0" />
-                                                         </font>
-                                                      </Label>
-                                                   </children>
-                                                </VBox>
-                                             </children>
-                                          </HBox>
-                                          <HBox alignment="CENTER_LEFT" fillHeight="false" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
-                                             <children>
-                                                <VBox prefHeight="200.0" prefWidth="100.0" spacing="4.0">
-                                                   <children>
-                                                      <Label style="-fx-background-image: white; -fx-background-radius: 15; -fx-padding: 10 15 10 15; -fx-border-color: #D9E3F0; -fx-border-radius: 15;" text="Sup" />
-                                                      <Label text="10:32 AM" textFill="GREY">
-                                                         <font>
-                                                            <Font size="11.0" />
-                                                         </font>
-                                                      </Label>
-                                                   </children>
-                                                </VBox>
-                                             </children>
-                                          </HBox>
                                        </children>
                                     </VBox>
                                  </content>
@@ -220,8 +184,8 @@
                                  </image>
                               </ImageView>
                            </graphic></Button>
-                        <TextField fx:id="messageField" text="Type a message" HBox.hgrow="ALWAYS" />
-                        <Button fx:id="sendButton" mnemonicParsing="false">
+                        <TextField fx:id="messageField" promptText="Type a message..." HBox.hgrow="ALWAYS" />
+                        <Button fx:id="sendButton" onAction="#sendMessage" mnemonicParsing="false">
                            <graphic>
                               <ImageView fitHeight="20.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
                                  <image>

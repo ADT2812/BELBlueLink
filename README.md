@@ -1,23 +1,32 @@
 # BlueLink Messenger with Offline AI
 
 ## Overview
-BlueLink is a Java-based desktop messaging application that supports:
-- One-to-one messaging
-- Group chats
-- File sharing
-- Offline AI features using **llama.cpp** and **Llama 3.2 GGUF**
+
+BlueLink is a Java-based desktop messaging application that supports real-time messaging with integrated offline AI assistance. The application provides one-to-one messaging, group chats, file sharing, and AI-powered features using **llama.cpp** with the **Llama 3.2 GGUF** model running locally.
 
 ---
 
-## Technologies Used
+## Features
+
+- One-to-one messaging
+- Group chat support
+- File sharing
+- Conversation summaries
+- Priority detection
+- Message classification
+- Reply suggestions
+- Offline AI (No internet required)
+
+---
+
+## Technologies
 
 - Java 21
 - JavaFX
-- Maven
 - Socket Programming
-- Git & GitHub
+- Maven
 - llama.cpp
-- Llama-3.2-3B-Instruct-Q4_K_M.gguf
+- Llama 3.2 GGUF
 
 ---
 
@@ -26,24 +35,30 @@ BlueLink is a Java-based desktop messaging application that supports:
 ```
 BlueLink
 │
-├── backendmain
+├── backendmain/
 │   ├── Server.java
 │   ├── ClientHandler.java
-│   ├── TestClient.java
-│   └── ai
-│       ├── config
-│       ├── core
-│       └── runtime
-│           ├── bin
+│   ├── MessageRouter.java
+│   ├── ChatHistoryManager.java
+│   ├── GroupManager.java
+│   ├── UserManager.java
+│   └── ai/
+│       ├── config/
+│       ├── core/
+│       └── runtime/
+│           ├── bin/
 │           │    └── llama-cli.exe
-│           └── model
+│           └── model/
 │                └── Llama-3.2-3B-Instruct-Q4_K_M.gguf
 │
-├── frontend
-│   ├── pom.xml
+├── frontend/
+│   ├── src/
+│   ├── out/
 │   ├── Main.java
-│   ├── login.fxml
-│   └── home.fxml
+│   ├── LoginController.java
+│   ├── HomeController.java
+│   ├── startClient.bat
+│   └── compileFrontend.bat
 │
 └── README.md
 ```
@@ -52,17 +67,17 @@ BlueLink
 
 ## Requirements
 
-- Java JDK 21
-- Maven
-- Git
-- `llama-cli.exe`
-- `Llama-3.2-3B-Instruct-Q4_K_M.gguf`
+- Java JDK 21+
+- JavaFX SDK
+- Maven (optional)
+- llama.cpp (`llama-cli.exe`)
+- Llama-3.2-3B-Instruct-Q4_K_M.gguf model
 
 ---
 
 ## AI Setup
 
-Place the files in the following locations:
+Place the model and executable in:
 
 ```
 backendmain/
@@ -74,31 +89,18 @@ backendmain/
              └── Llama-3.2-3B-Instruct-Q4_K_M.gguf
 ```
 
-To verify the model:
-
-```bash
-cd backendmain\ai\runtime\bin
-
-.\llama-cli.exe -m ..\model\Llama-3.2-3B-Instruct-Q4_K_M.gguf -p "Hello" -n 20
-```
-
-If the model replies, the AI setup is complete.
-
 ---
 
-## Compile the Backend
+## Running the Application
+
+### 1. Compile the Backend
 
 ```bash
 cd backendmain
-
 javac *.java
 ```
 
----
-
-## Run the Backend
-
-Start the server:
+### 2. Start the Server
 
 ```bash
 java Server
@@ -107,144 +109,87 @@ java Server
 Expected output:
 
 ```
+Server started on port 5000
 Waiting for clients...
 ```
 
 ---
 
-## Run Clients
+### 3. Compile the Frontend
 
-Open a new terminal:
-
-```bash
-cd backendmain
-java TestClient
-```
-
-Enter a username (e.g., Alice).
-
-Open another terminal:
+From the project root:
 
 ```bash
-java TestClient
+compileFrontend.bat
 ```
 
-Enter another username (e.g., Bob).
-
-You should now be able to exchange messages.
-
----
-
-## AI Commands
-
-Conversation Summary
-
-```
-/summary Bob
-```
-
-Priority Detection
-
-```
-/priority Meeting at 9 AM tomorrow
-```
-
-Message Classification
-
-```
-/classify Let's meet tomorrow
-```
-
-Smart Search
-
-```
-/search meeting
-```
-
-Reply Suggestions
-
-```
-/reply Thank you for your help
-```
-
----
-
-## Run the Frontend
+or manually:
 
 ```bash
 cd frontend
 
-mvn clean javafx:run
+javac ^
+--module-path "..\javafx-sdk-26.0.1\lib" ^
+--add-modules javafx.controls,javafx.fxml ^
+-d out ^
+src\main\java\com\messenger\*.java
 ```
 
-*(Frontend must be connected to the backend to enable messaging and AI features.)*
+Copy resources after compilation:
+
+```powershell
+Copy-Item -Recurse -Force src\main\resources\* out\
+```
 
 ---
 
-## Push to GitHub
+### 4. Launch the Frontend
 
-Initialize Git:
-
-```bash
-git init
-```
-
-Add files:
+From the project root:
 
 ```bash
-git add .
+startClient.bat
 ```
 
-Commit:
+Login using **any username** (no password is required).
 
-```bash
-git commit -m "Initial BlueLink Messenger"
-```
+Open another client window and login with a different username to start chatting.
 
-Add your repository:
+---
 
-```bash
-git remote add origin <repository-url>
-```
+## AI Features
 
-Push:
+The application supports:
 
-```bash
-git branch -M main
-git push -u origin main
-```
+- Conversation Summary
+- Priority Detection
+- Message Classification
+- Reply Suggestions
+
+These features run locally using the Llama 3.2 model.
 
 ---
 
 ## Troubleshooting
 
-**GGUF model not found**
-- Verify the model is in `backendmain/ai/runtime/model`.
+**Frontend opens but Home page doesn't load**
 
-**llama-cli.exe not found**
-- Verify the executable is in `backendmain/ai/runtime/bin`.
+- Ensure `Home.fxml` is copied into the `out/view` folder.
+- Verify `fx:controller="com.messenger.HomeController"` is correct.
 
-**Server not starting**
-- Compile first using:
-  ```bash
-  javac *.java
-  ```
+**FXML LoadException**
 
-**Client not connecting**
-- Ensure `java Server` is already running before starting clients.
+- Check that every `onAction` method referenced in the FXML exists in the controller.
+- Ensure all `fx:id` values match the controller variables.
 
----
+**Client cannot connect**
 
-## Features
+- Start the backend server before launching the frontend.
 
-- One-to-one messaging
-- Group chats
-- File sharing
-- Conversation summary
-- Priority detection
-- Message classification
-- Smart conversation search
-- AI reply suggestions
+**Messages not appearing**
+
+- Ensure two clients are connected with different usernames.
+- Verify the server is running and both clients are connected.
 
 ---
 

@@ -285,6 +285,17 @@ if (input.startsWith("/search ")) {
         continue;
     }
 
+    if(input.startsWith("/ai ")){
+
+    String prompt=input.substring(4);
+
+    String answer=
+            aiService.generateResponse(prompt);
+
+    sendMessage(answer);
+
+    continue;
+}
     if (input.startsWith("/sendfile ")) {
 
         

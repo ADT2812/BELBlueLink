@@ -4,91 +4,34 @@ public class AIService {
 
     private final LLMClient client = new LLMClient();
 
-    // 1. Conversation Summary
-    public String summarize(String conversation) {
-
-        String prompt =
-                """
-                You are an intelligent assistant.
-
-                Summarize the following conversation in less than 100 words.
-
-                Conversation:
-                """ + conversation;
-
+    public String generateResponse(String prompt) {
         return client.generateResponse(prompt);
     }
 
-    // 2. Priority Detection
-    public String detectPriority(String message) {
-
-        String prompt =
-                """
-                Classify the message as:
-
-                High
-                Medium
-                Low
-
-                Return ONLY one word.
-
-                Message:
-                """ + message;
-
-        return client.generateResponse(prompt);
+    public String summarize(String text) {
+        return client.generateResponse(
+            "Summarize this conversation:\n\n" + text);
     }
 
-    // 3. Message Classification
-    public String classify(String message) {
-
-        String prompt =
-                """
-                Categorize this message into ONE category:
-
-                Work
-                Personal
-                Meeting
-                Urgent
-                Casual
-
-                Return ONLY the category.
-
-                Message:
-                """ + message;
-
-        return client.generateResponse(prompt);
+    public String detectPriority(String text) {
+        return client.generateResponse(
+            "Classify this message as HIGH, MEDIUM or LOW priority and explain briefly:\n\n" + text);
     }
 
-    // 4. Reply Suggestions
-    public String suggestReplies(String message) {
-
-        String prompt =
-                """
-                Suggest three short replies.
-
-                Return one reply per line.
-
-                Message:
-                """ + message;
-
-        return client.generateResponse(prompt);
+    public String classify(String text) {
+        return client.generateResponse(
+            "Classify this message into one category (Work, Personal, Finance, Study, Other):\n\n" + text);
     }
 
-    // 5. Smart Search
-    public String search(String conversation, String query) {
+    public String suggestReplies(String text) {
+        return client.generateResponse(
+            "Suggest three short replies for:\n\n" + text);
+    }
 
-        String prompt =
-                """
-                Search the conversation below and answer the user's query.
-
-                Query:
-                """ + query +
-
-                """
-
-                Conversation:
-                """ + conversation;
-
-        return client.generateResponse(prompt);
+    public String search(String history, String query) {
+        return client.generateResponse(
+            "Answer the question using only this chat history.\n\nHistory:\n"
+            + history +
+            "\n\nQuestion: " + query);
     }
 }
