@@ -2,6 +2,9 @@ package com.messenger;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Client {
 
@@ -11,34 +14,35 @@ public class Client {
 
     public boolean connect(String username, String password) {
 
-        try {
+    try {
 
-            socket = new Socket("localhost", 5000);
+        socket = new Socket("localhost", 5000);
 
-            reader = new BufferedReader(
-                    new InputStreamReader(socket.getInputStream()));
+        reader = new BufferedReader(
+                new InputStreamReader(socket.getInputStream()));
 
-            writer = new PrintWriter(
-                    socket.getOutputStream(),
-                    true);
+        writer = new PrintWriter(
+                socket.getOutputStream(),
+                true);
 
-            // Wait for server prompt
-            reader.readLine();
+        String prompt = reader.readLine();
+System.out.println("SERVER: " + prompt);
 
-            // Send credentials
-            writer.println(username);
-            writer.println(password);
+writer.println(username);
+writer.println(password);
 
-            // Read login result
-            String response = reader.readLine();
+String response = reader.readLine();
+System.out.println("LOGIN RESPONSE: " + response);
 
-            return "LOGIN_SUCCESS".equals(response);
+return "LOGIN_SUCCESS".equals(response);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
+    } catch (Exception e) {
+
+        e.printStackTrace();
+        return false;
+
     }
+}
 
     public void sendMessage(String receiver, String message) {
         if (writer != null) {
@@ -63,6 +67,25 @@ public class Client {
         }
     }
 
+    public List<String> getAllUsers() {
+
+    try {
+
+        writer.println("LIST_USERS");
+
+        String response = reader.readLine();
+
+        if (response == null || response.isBlank()) {
+            return new ArrayList<>();
+        }
+
+        return Arrays.asList(response.split(","));
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        return new ArrayList<>();
+    }
+}
     public void sendFile(String target, File file, boolean isGroup) {
 
         try {
@@ -109,10 +132,6 @@ public class Client {
     }
 
     public void askAI(String prompt) {
-        writer.println("/ai " + prompt);
-    }
-
-    public String receiveAIResponse() {
-        return receiveMessage();
-    }
+    writer.println("/ai " + prompt);
+}
 }

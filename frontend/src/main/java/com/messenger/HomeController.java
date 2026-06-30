@@ -72,22 +72,12 @@ private Label chatStatusLabel;
 @FXML
 private ScrollPane chatScrollPane;
 
-@FXML
-private Button callButton;
-
-@FXML
-private Button moreButton;
-
 
     private Client client;
 
     private String selectedUser = "";
     private ObservableList<String> allContacts =
-        FXCollections.observableArrayList(
-                "Aditi",
-                "Rudraksh",
-                "Madhumitha"
-        );
+        FXCollections.observableArrayList();
 
     private String currentTime() {
     return java.time.LocalTime.now()
@@ -96,37 +86,41 @@ private Button moreButton;
 
     public void setClient(Client client) {
 
-        this.client = client;
+    this.client = client;
 
-        contactsListView.getItems().clear();
-        contactsListView.setItems(allContacts);
-        contactsListView.getSelectionModel()
-                .selectedItemProperty()
-                .addListener((obs, oldValue, newValue) -> {
+    allContacts.clear();
 
-                    if (newValue == null)
-                        return;
-
-                    selectedUser = newValue;
-                    chatUserLabel.setText(newValue);
-chatStatusLabel.setText("Online");
-
-                    if (welcomePane != null) {
-                        welcomePane.setVisible(false);
-                        welcomePane.setManaged(false);
-                    }
-
-                    if (chatPane != null) {
-                        chatPane.setVisible(true);
-                        chatPane.setManaged(true);
-                    }
-
-                    messagesContainer.getChildren().clear();
-                });
-
-        startReceiver();
+    try {
+        allContacts.addAll(client.getAllUsers());
+    } catch (Exception e) {
+        e.printStackTrace();
     }
 
+    contactsListView.setItems(allContacts);
+
+    contactsListView.getSelectionModel()
+        .selectedItemProperty()
+        .addListener((obs, oldValue, newValue) -> {
+
+            if(newValue==null)
+                return;
+
+            selectedUser = newValue;
+
+            chatUserLabel.setText(newValue);
+            chatStatusLabel.setText("Online");
+
+            welcomePane.setVisible(false);
+            welcomePane.setManaged(false);
+
+            chatPane.setVisible(true);
+            chatPane.setManaged(true);
+
+            messagesContainer.getChildren().clear();
+        });
+
+    startReceiver();
+}
     @FXML
 private void initialize() {
 
@@ -184,7 +178,7 @@ private void initialize() {
         client.sendMessage(selectedUser, text);
 
         addOutgoingMessage(text);
-        messagesContainer.layout();
+        
 
         messageField.clear();
     }
@@ -208,7 +202,7 @@ private void initialize() {
         client.sendFile(selectedUser, file, false);
 
         addOutgoingMessage("[File] " + file.getName());
-        messagesContainer.layout();
+    
     }
 
     @FXML
@@ -217,7 +211,12 @@ private void initialize() {
         if (client != null)
             client.disconnect();
 
-        System.exit(0);
+        client.disconnect();
+
+Stage stage =
+        (Stage) SettingButton.getScene().getWindow();
+
+stage.close();
     }
     @FXML
 public void openAIAssistant() {
@@ -244,30 +243,6 @@ public void openAIAssistant() {
     }
 } 
 
-    @FXML
-private void openSettings() {
-
-    ContextMenu menu = new ContextMenu();
-
-    MenuItem profile = new MenuItem("Profile");
-    MenuItem darkMode = new MenuItem("Dark Mode");
-    MenuItem downloads = new MenuItem("Downloads");
-    MenuItem notifications = new MenuItem("Notifications");
-    MenuItem logout = new MenuItem("Logout");
-
-    logout.setOnAction(e -> logout());
-
-    menu.getItems().addAll(
-            profile,
-            darkMode,
-            downloads,
-            notifications,
-            logout
-    );
-
-    menu.show(SettingButton, Side.BOTTOM, 0, 0);
-}
-
     private void startReceiver() {
 
     Thread thread = new Thread(() -> {
@@ -282,6 +257,11 @@ private void openSettings() {
             Platform.runLater(() -> {
 
                 try {
+
+                    if (msg.startsWith("AI:")) {
+                        AIController.addResponse(msg.substring(3));
+                        return;
+                    }
 
                     if (msg.startsWith("FILE:")) {
 
@@ -304,8 +284,6 @@ private void openSettings() {
 
                     }
 
-                    messagesContainer.layout();
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -320,28 +298,29 @@ private void openSettings() {
     thread.start();
 }
 
+
 private void addIncomingFile(String fileName, String path) {
 
     Hyperlink link = new Hyperlink("📎 " + fileName);
 
     link.setOnAction(e -> {
-
         try {
-
-            java.awt.Desktop.getDesktop().open(new File(path));
-
+            Desktop.getDesktop().open(new File(path));
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-
     });
 
-    VBox bubble = new VBox(link);
+    Label time = new Label(currentTime());
+    time.setStyle("-fx-font-size:10; -fx-text-fill:gray;");
 
+    VBox bubble = new VBox(link, time);
     bubble.setStyle(
             "-fx-background-color:white;" +
+            "-fx-background-radius:15;" +
             "-fx-padding:10;" +
-            "-fx-background-radius:15;"
+            "-fx-border-color:#D9E3F0;" +
+            "-fx-border-radius:15;"
     );
 
     HBox box = new HBox(bubble);
@@ -350,55 +329,7 @@ private void addIncomingFile(String fileName, String path) {
 
     Platform.runLater(() -> chatScrollPane.setVvalue(1.0));
 }
-
     private void addIncomingMessage(String text) {
-
-    if (text.startsWith("FILE:")) {
-
-        String[] parts = text.split(":", 6);
-
-        String sender = parts[1];
-        String fileName = parts[2];
-        String base64 = parts[5];
-
-        try {
-
-            String path = FileManager.saveIncomingFile(sender, fileName, base64);
-
-            javafx.scene.control.Hyperlink link =
-                    new javafx.scene.control.Hyperlink("📎 " + fileName);
-
-            link.setOnAction(e -> {
-
-                try {
-                    java.awt.Desktop.getDesktop().open(new java.io.File(path));
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-
-            });
-
-            Label time = new Label(currentTime());
-            time.setStyle("-fx-font-size:10; -fx-text-fill:gray;");
-
-            VBox bubble = new VBox(link, time);
-
-            HBox box = new HBox(bubble);
-
-            messagesContainer.getChildren().add(box);
-
-            Platform.runLater(() -> chatScrollPane.setVvalue(1.0));
-
-        }
-
-        catch (Exception e) {
-
-            e.printStackTrace();
-
-        }
-
-        return;
-    }
 
     Label label = new Label(text);
 
@@ -413,7 +344,6 @@ private void addIncomingFile(String fileName, String path) {
     );
 
     Label time = new Label(currentTime());
-
     time.setStyle("-fx-font-size:10; -fx-text-fill:gray;");
 
     VBox bubble = new VBox(label, time);
@@ -424,7 +354,6 @@ private void addIncomingFile(String fileName, String path) {
 
     Platform.runLater(() -> chatScrollPane.setVvalue(1.0));
 }
-
     private void addOutgoingMessage(String text) {
 
         Label label = new Label(text);

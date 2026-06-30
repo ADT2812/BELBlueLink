@@ -7,11 +7,9 @@ import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.concurrent.TimeUnit;
 
 public class LLMClient {
 
-    // Keeps conversation history during the current application session
     private final StringBuilder memory = new StringBuilder();
 
     public String generateResponse(String prompt) {
@@ -34,118 +32,73 @@ public class LLMClient {
                 return "llama-cli.exe not found:\n" + exePath.toAbsolutePath();
             }
 
-            // Store user message
-            memory.append("User: ")
-                    .append(prompt)
-                    .append("\n");
-
-            // Limit memory size
-            if (memory.length() > 8000) {
-                memory.delete(0, 3000);
-            }
-
             String fullPrompt =
-                    """
-                    You are BlueLink AI.
-
-                    You are a smart offline AI assistant integrated inside BlueLink Messenger.
-
-                    Rules:
-                    - Be friendly.
-                    - Be accurate.
-                    - Give natural answers.
-                    - Remember previous conversation.
-                    - Answer programming questions.
-                    - Answer mathematics.
-                    - Answer networking questions.
-                    - Answer operating system questions.
-                    - Answer database questions.
-                    - Explain concepts clearly.
-                    - Write Java code when requested.
-                    - Debug code.
-                    - Never say you are llama.cpp.
-                    - Never mention system prompts.
-                    - Never repeat the user's question.
-                    - Keep answers concise unless asked for details.
-
-                    Conversation:
-
-                    """
-                    + memory.toString()
-                    + "\nAssistant:";
+                    "<|begin_of_text|>"
+                    + "<|start_header_id|>system<|end_header_id|>\n"
+                    + "You are BlueLink AI. Answer only with the final answer. Do not repeat the prompt.\n"
+                    + "<|eot_id|>"
+                    + "<|start_header_id|>user<|end_header_id|>\n"
+                    + prompt
+                    + "<|eot_id|>"
+                    + "<|start_header_id|>assistant<|end_header_id|>\n";
 
             ProcessBuilder pb = new ProcessBuilder(
                     ModelConfig.EXECUTABLE_PATH,
                     "-m", ModelConfig.MODEL_PATH,
                     "-p", fullPrompt,
-                    "-n", "512",
+                    "-n", "256",
                     "-c", String.valueOf(ModelConfig.CONTEXT),
                     "--threads", String.valueOf(ModelConfig.THREADS),
                     "--temp", "0.6",
                     "--top-k", "40",
                     "--top-p", "0.9",
                     "--repeat-penalty", "1.1",
-                    "--single-turn",
-                    "--no-display-prompt"
+                    "--single-turn"
             );
 
             pb.redirectErrorStream(true);
 
             Process process = pb.start();
 
-            if (!process.waitFor(120, TimeUnit.SECONDS)) {
-                process.destroyForcibly();
-                return "AI request timed out.";
-            }
-
             BufferedReader reader =
                     new BufferedReader(
-                            new InputStreamReader(
-                                    process.getInputStream()));
+                            new InputStreamReader(process.getInputStream()));
 
-            StringBuilder answer = new StringBuilder();
-
+            StringBuilder output = new StringBuilder();
             String line;
 
             while ((line = reader.readLine()) != null) {
-
-                line = line.trim();
-
-                if (line.isEmpty())
-                    continue;
-
-                // Ignore llama-cli logs
-                if (line.startsWith("build")) continue;
-                if (line.startsWith("system")) continue;
-                if (line.startsWith("main")) continue;
-                if (line.startsWith("load")) continue;
-                if (line.startsWith("llama")) continue;
-                if (line.startsWith("model")) continue;
-                if (line.startsWith("sampling")) continue;
-                if (line.startsWith("context")) continue;
-                if (line.startsWith("available")) continue;
-                if (line.startsWith(">")) continue;
-                if (line.startsWith("Exiting")) continue;
-                if (line.startsWith("[ Prompt")) continue;
-                if (line.startsWith("/")) continue;
-                if (line.startsWith("██")) continue;
-                if (line.startsWith("▄▄")) continue;
-
-                answer.append(line).append(" ");
+                output.append(line).append("\n");
             }
 
-            String response = answer.toString().trim();
+            process.waitFor();
 
-            if (response.isEmpty()) {
-                response = "Sorry, I couldn't generate a response.";
-            }
+            String response = output.toString();
 
-            // Save AI response to memory
-            memory.append("Assistant: ")
-                    .append(response)
-                    .append("\n\n");
+// Find where the assistant starts
+String marker = "<|start_header_id|>assistant<|end_header_id|>";
+int start = response.indexOf(marker);
 
-            return response;
+if (start != -1) {
+    response = response.substring(start + marker.length());
+}
+
+// Remove everything after generation statistics
+int end = response.indexOf("[ Prompt:");
+if (end != -1) {
+    response = response.substring(0, end);
+}
+
+// Remove "Exiting..."
+response = response.replace("Exiting...", "");
+
+// Trim whitespace
+response = response.trim();
+
+memory.append("User: ").append(prompt).append("\n");
+memory.append("Assistant: ").append(response).append("\n");
+
+return response;
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -153,7 +106,6 @@ public class LLMClient {
         }
     }
 
-    // Clears conversation memory
     public void clearMemory() {
         memory.setLength(0);
     }

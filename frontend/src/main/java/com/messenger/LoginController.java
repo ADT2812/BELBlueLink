@@ -47,15 +47,17 @@ public class LoginController {
 
         System.out.println("Connecting to server...");
 
-        if (!client.connect(username,password)) {
+        boolean connected = client.connect(username, password);
+System.out.println("CONNECTED = " + connected);
 
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Connection Error");
-            alert.setHeaderText(null);
-            alert.setContentText("Cannot connect to the server.");
-            alert.showAndWait();
-            return;
-        }
+if (!connected) {
+    Alert alert = new Alert(Alert.AlertType.ERROR);
+    alert.setTitle("Login Failed");
+    alert.setHeaderText(null);
+    alert.setContentText("Login failed.");
+    alert.showAndWait();
+    return;
+}
 
         try {
 

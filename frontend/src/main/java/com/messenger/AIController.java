@@ -24,42 +24,46 @@ public class AIController {
 
     private Client client;
 
+    private static AIController instance;
+
+    @FXML
+    private void initialize() {
+        instance = this;
+    }
+
     public void setClient(Client client) {
         this.client = client;
     }
 
     @FXML
-    private void sendMessage() {
+private void sendMessage() {
 
-        String prompt = questionField.getText().trim();
+    String prompt = questionField.getText().trim();
 
-        if (prompt.isEmpty()) {
+    if (prompt.isEmpty())
+        return;
+
+    addUserBubble(prompt);
+    questionField.clear();
+
+    if (client == null) {
+        addAIBubble("Client is not connected.");
+        return;
+    }
+
+    client.askAI(prompt);
+
+    // DO NOT call receiveAIResponse() here.
+}
+
+    public static void addResponse(String text) {
+
+        if (instance == null)
             return;
-        }
 
-        addUserBubble(prompt);
-
-        if (client != null) {
-
-            client.askAI(prompt);
-
-            new Thread(() -> {
-
-                String response = client.receiveAIResponse();
-
-                Platform.runLater(() -> {
-                    addAIBubble(response);
-                });
-
-            }).start();
-
-        } else {
-
-            addAIBubble("Client is not connected.");
-
-        }
-
-        questionField.clear();
+        Platform.runLater(() ->
+                instance.addAIBubble(text)
+        );
     }
 
     private void addUserBubble(String text) {
@@ -71,11 +75,14 @@ public class AIController {
         label.setStyle(
                 "-fx-background-color:#DCF8C6;" +
                 "-fx-padding:10;" +
-                "-fx-background-radius:12;");
+                "-fx-background-radius:12;"
+        );
 
         chatBox.getChildren().add(label);
 
-        Platform.runLater(() -> scrollPane.setVvalue(1.0));
+        Platform.runLater(() ->
+                scrollPane.setVvalue(1.0)
+        );
     }
 
     private void addAIBubble(String text) {
@@ -87,10 +94,13 @@ public class AIController {
         label.setStyle(
                 "-fx-background-color:#EEEEEE;" +
                 "-fx-padding:10;" +
-                "-fx-background-radius:12;");
+                "-fx-background-radius:12;"
+        );
 
         chatBox.getChildren().add(label);
 
-        Platform.runLater(() -> scrollPane.setVvalue(1.0));
+        Platform.runLater(() ->
+                scrollPane.setVvalue(1.0)
+        );
     }
 }

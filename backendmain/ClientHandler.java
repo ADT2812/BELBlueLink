@@ -3,6 +3,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import ai.core.AIService;
+import java.io.File;
 
 public class ClientHandler implements Runnable {
 
@@ -127,9 +128,11 @@ public class ClientHandler implements Runnable {
             writer.println("Enter Username:");
 
             username = reader.readLine();
+            System.out.println("Username = " + username);
 
             String password = reader.readLine();
-
+            System.out.println("Password received");
+System.out.println("Checking login...");
 if(!UserDatabase.login(username,password)){
     writer.println("LOGIN_FAILED");
     clientSocket.close();
@@ -138,9 +141,9 @@ if(!UserDatabase.login(username,password)){
 
 UserManager.addUser(username,this);
 
-writer.println("LOGIN_SUCCESS");
 
-            writer.println("LOGIN_SUCCESS");
+writer.println("LOGIN_SUCCESS");
+System.out.println("Login successful");
 
             String input;
 
@@ -285,14 +288,19 @@ if (input.startsWith("/search ")) {
         continue;
     }
 
-    if(input.startsWith("/ai ")){
+    if (input.equals("LIST_USERS")) {
 
-    String prompt=input.substring(4);
+    writer.println(String.join(",", UserDatabase.getAllUsers()));
 
-    String answer=
-            aiService.generateResponse(prompt);
+    continue;
+}
+    if (input.startsWith("/ai ")) {
 
-    sendMessage(answer);
+    String prompt = input.substring(4);
+
+    String answer = aiService.generateResponse(prompt);
+
+    writer.println("AI:" + answer);
 
     continue;
 }
